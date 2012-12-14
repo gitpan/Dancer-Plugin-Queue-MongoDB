@@ -1,0 +1,46 @@
+---
+abstract: 'No abstract given for Dancer::Plugin::Queue::MongoDB'
+author:
+  - 'David Golden <dagolden@cpan.org>'
+build_requires:
+  Dancer: 0
+  Dancer::Plugin::Queue: 0
+  Dancer::Test: 0
+  File::Find: 0
+  File::Temp: 0
+  MongoDB: 0.45
+  Test::More: 0.96
+configure_requires:
+  ExtUtils::MakeMaker: 6.30
+dynamic_config: 0
+generated_by: 'Dist::Zilla version 4.300028, CPAN::Meta::Converter version 2.120921'
+license: apache
+meta-spec:
+  url: http://module-build.sourceforge.net/META-spec-v1.4.html
+  version: 1.4
+name: Dancer-Plugin-Queue-MongoDB
+no_index:
+  directory:
+    - t
+    - xt
+    - examples
+    - corpus
+  package:
+    - DB
+provides:
+  Dancer::Plugin::Queue::MongoDB:
+    file: lib/Dancer/Plugin/Queue/MongoDB.pm
+    version: 0.001
+requires:
+  Dancer::Plugin::Queue::Role::Queue: 0
+  MongoDB: 0
+  MongoDBx::Queue: 0
+  Moose: 0
+  perl: 5.008001
+  strict: 0
+  warnings: 0
+resources:
+  bugtracker: https://github.com//dancer-plugin-queue-mongodb/issues
+  homepage: https://metacpan.org/release/Dancer-Plugin-Queue-MongoDB
+  repository: git://github.com/dagolden/dancer-plugin-queue-mongodb.git
+version: 0.001
