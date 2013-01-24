@@ -4,11 +4,12 @@ use warnings;
 
 package Dancer::Plugin::Queue::MongoDB;
 # ABSTRACT: No abstract given for Dancer::Plugin::Queue::MongoDB
-our $VERSION = '0.001'; # VERSION
+our $VERSION = '0.002'; # VERSION
 
 # Dependencies
 use Moose;
 use MongoDB;
+use MongoDB::MongoClient; # ensure we have a new-enough MongoDB client
 use MongoDBx::Queue;
 
 with 'Dancer::Plugin::Queue::Role::Queue';
@@ -44,20 +45,20 @@ has queue => (
 sub _build_queue {
   my ($self) = @_;
   return MongoDBx::Queue->new(
-    db   => $self->_mongodb_conn->get_database( $self->db_name ),
+    db   => $self->_mongodb_client->get_database( $self->db_name ),
     name => $self->queue_name,
   );
 }
 
-has _mongodb_conn => (
+has _mongodb_client => (
   is         => 'ro',
-  isa        => 'MongoDB::Connection',
+  isa        => 'MongoDB::MongoClient',
   lazy_build => 1,
 );
 
-sub _build__mongodb_conn {
+sub _build__mongodb_client {
   my ($self) = @_;
-  return MongoDB::Connection->new( $self->connection_options );
+  return MongoDB::MongoClient->new( $self->connection_options );
 }
 
 sub add_msg {
@@ -91,7 +92,7 @@ Dancer::Plugin::Queue::MongoDB - No abstract given for Dancer::Plugin::Queue::Mo
 
 =head1 VERSION
 
-version 0.001
+version 0.002
 
 =head1 SYNOPSIS
 
@@ -171,7 +172,7 @@ L<MongoDB::Connection>
 =head2 Bugs / Feature Requests
 
 Please report any bugs or feature requests through the issue tracker
-at L<https://github.com//dancer-plugin-queue-mongodb/issues>.
+at L<https://github.com/dagolden/dancer-plugin-queue-mongodb/issues>.
 You will be notified automatically of any progress on your issue.
 
 =head2 Source Code

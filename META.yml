@@ -13,7 +13,7 @@ build_requires:
 configure_requires:
   ExtUtils::MakeMaker: 6.30
 dynamic_config: 0
-generated_by: 'Dist::Zilla version 4.300028, CPAN::Meta::Converter version 2.120921'
+generated_by: 'Dist::Zilla version 4.300029, CPAN::Meta::Converter version 2.120921'
 license: apache
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
@@ -30,17 +30,18 @@ no_index:
 provides:
   Dancer::Plugin::Queue::MongoDB:
     file: lib/Dancer/Plugin/Queue/MongoDB.pm
-    version: 0.001
+    version: 0.002
 requires:
   Dancer::Plugin::Queue::Role::Queue: 0
   MongoDB: 0
+  MongoDB::MongoClient: 0
   MongoDBx::Queue: 0
   Moose: 0
   perl: 5.008001
   strict: 0
   warnings: 0
 resources:
-  bugtracker: https://github.com//dancer-plugin-queue-mongodb/issues
+  bugtracker: https://github.com/dagolden/dancer-plugin-queue-mongodb/issues
   homepage: https://metacpan.org/release/Dancer-Plugin-Queue-MongoDB
   repository: git://github.com/dagolden/dancer-plugin-queue-mongodb.git
-version: 0.001
+version: 0.002
