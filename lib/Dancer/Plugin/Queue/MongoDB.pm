@@ -3,14 +3,14 @@ use strict;
 use warnings;
 
 package Dancer::Plugin::Queue::MongoDB;
-# ABSTRACT: No abstract given for Dancer::Plugin::Queue::MongoDB
-our $VERSION = '0.002'; # VERSION
+# ABSTRACT: Dancer::Plugin::Queue backend using MongoDB
+our $VERSION = '0.003'; # VERSION
 
 # Dependencies
 use Moose;
-use MongoDB;
-use MongoDB::MongoClient; # ensure we have a new-enough MongoDB client
-use MongoDBx::Queue;
+use MooseX::AttributeShortcuts;
+use MongoDBx::Queue 1.000; # new API
+use namespace::autoclean;
 
 with 'Dancer::Plugin::Queue::Role::Queue';
 
@@ -37,28 +37,17 @@ has connection_options => (
 
 
 has queue => (
-  is         => 'ro',
+  is         => 'lazy',
   isa        => 'MongoDBx::Queue',
-  lazy_build => 1,
 );
 
 sub _build_queue {
   my ($self) = @_;
   return MongoDBx::Queue->new(
-    db   => $self->_mongodb_client->get_database( $self->db_name ),
-    name => $self->queue_name,
+    database_name => $self->db_name,
+    collection_name => $self->queue_name,
+    client_options => $self->connection_options,
   );
-}
-
-has _mongodb_client => (
-  is         => 'ro',
-  isa        => 'MongoDB::MongoClient',
-  lazy_build => 1,
-);
-
-sub _build__mongodb_client {
-  my ($self) = @_;
-  return MongoDB::MongoClient->new( $self->connection_options );
 }
 
 sub add_msg {
@@ -77,6 +66,8 @@ sub remove_msg {
   $self->queue->remove_task($msg);
 }
 
+__PACKAGE__->meta->make_immutable;
+
 1;
 
 
@@ -86,13 +77,15 @@ __END__
 
 =pod
 
+=encoding utf-8
+
 =head1 NAME
 
-Dancer::Plugin::Queue::MongoDB - No abstract given for Dancer::Plugin::Queue::MongoDB
+Dancer::Plugin::Queue::MongoDB - Dancer::Plugin::Queue backend using MongoDB
 
 =head1 VERSION
 
-version 0.002
+version 0.003
 
 =head1 SYNOPSIS
 
@@ -172,7 +165,7 @@ L<MongoDB::Connection>
 =head2 Bugs / Feature Requests
 
 Please report any bugs or feature requests through the issue tracker
-at L<https://github.com/dagolden/dancer-plugin-queue-mongodb/issues>.
+at L<https://github.com/dagolden/Dancer-Plugin-Queue-MongoDB/issues>.
 You will be notified automatically of any progress on your issue.
 
 =head2 Source Code
@@ -180,9 +173,9 @@ You will be notified automatically of any progress on your issue.
 This is open source software.  The code repository is available for
 public review and contribution under the terms of the license.
 
-L<https://github.com/dagolden/dancer-plugin-queue-mongodb>
+L<https://github.com/dagolden/Dancer-Plugin-Queue-MongoDB>
 
-  git clone git://github.com/dagolden/dancer-plugin-queue-mongodb.git
+  git clone https://github.com/dagolden/Dancer-Plugin-Queue-MongoDB.git
 
 =head1 AUTHOR
 
